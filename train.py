@@ -54,7 +54,7 @@ def main(_):
     multi_box_loss = MultiBoxLoss()
 
     # load checkpoint
-    checkpoint_dir = './checkpoints/' + cfg['sub_name']
+    checkpoint_dir = '/content/drive/My Drive/Colab/checkpoints/' + cfg['sub_name']
     checkpoint = tf.train.Checkpoint(step=tf.Variable(0, name='step'),
                                      optimizer=optimizer,
                                      model=model)
