@@ -40,7 +40,7 @@ def Backbone(backbone_type='ResNet50', use_pretrain=True):
         weights = 'imagenet'
 
     def backbone(x):
-        if backbone_type == 'cc':
+        if backbone_type == 'ResNet50':
             extractor = ResNet50(
                 input_shape=x.shape[1:], include_top=False, weights=weights) #[160, 160, 256]
             pick_layer1 = 80  # [80, 80, 512]
