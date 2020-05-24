@@ -67,11 +67,10 @@ def main(_argv):
     cfg = load_yaml(FLAGS.cfg_path)
 
     # define network
-    model = RetinaFaceModel(cfg, training=False, iou_th=FLAGS.iou_th,
-                            score_th=FLAGS.score_th)
+    model = RetinaFaceModel(cfg, training=False, iou_th=FLAGS.iou_th, score_th=FLAGS.score_th)
 
     # load checkpoint
-    checkpoint_dir = './checkpoints/' + cfg['sub_name']
+    checkpoint_dir = '/content/drive/My Drive/Colab/checkpoints/' + cfg['sub_name']
     checkpoint = tf.train.Checkpoint(model=model)
     if tf.train.latest_checkpoint(checkpoint_dir):
         checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir))
