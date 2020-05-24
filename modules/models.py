@@ -40,9 +40,9 @@ def Backbone(backbone_type='ResNet50', use_pretrain=True):
         weights = 'imagenet'
 
     def backbone(x):
-        if backbone_type == 'ResNet50':
+        if backbone_type == 'cc':
             extractor = ResNet50(
-                input_shape=x.shape[1:], include_top=False, weights=weights)
+                input_shape=x.shape[1:], include_top=False, weights=weights) #[160, 160, 256]
             pick_layer1 = 80  # [80, 80, 512]
             pick_layer2 = 142  # [40, 40, 1024]
             pick_layer3 = 174  # [20, 20, 2048]
@@ -124,7 +124,7 @@ class FPN(tf.keras.layers.Layer):
 
 
 class SSH(tf.keras.layers.Layer):
-    """Single Stage Headless Layer"""
+    """Single Stage Headless Layer, khoi context"""
     def __init__(self, out_ch, wd, name='SSH', **kwargs):
         super(SSH, self).__init__(name=name, **kwargs)
         assert out_ch % 4 == 0
@@ -203,6 +203,7 @@ def RetinaFaceModel(cfg, training=False, iou_th=0.4, score_th=0.02,
                     name='RetinaFaceModel'):
     """Retina Face Model"""
     input_size = cfg['input_size'] if training else None
+
     wd = cfg['weights_decay']
     out_ch = cfg['out_channel']
     num_anchor = len(cfg['min_sizes'][0])
@@ -215,7 +216,7 @@ def RetinaFaceModel(cfg, training=False, iou_th=0.4, score_th=0.02,
 
     fpn = FPN(out_ch=out_ch, wd=wd)(x)
 
-    features = [SSH(out_ch=out_ch, wd=wd, name=f'SSH_{i}')(f)
+    features = [SSH(out_ch=out_ch, wd=wd, name=f'SSH_{i}')(f)  #output 256 sau concon cua context(SSH)
                 for i, f in enumerate(fpn)]
 
     bbox_regressions = tf.concat(
